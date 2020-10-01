@@ -11,7 +11,11 @@ admin.initializeApp({
   databaseURL: "https://flordb-38125.firebaseio.com",
 });
 
-const db = admin.database();
+var db = admin.database();
+var ref = db.ref("contacts");
+ref.once("value", function (snapshot) {
+  console.log(snapshot.val());
+});
 
 const client = require("twilio")(
   process.env.TWILIO_ACCOUNT_SID,
@@ -30,75 +34,93 @@ app.get("/api/greeting", (req, res) => {
 });
 
 const getName = function (input) {
-  if (input.includes("mi nombre es")) {
-    const searchTerm = "es";
-    const index = input.lastIndexOf(searchTerm);
-    const name = input.slice(index);
-    console.log(index);
-    return name;
-  } else {
-    return "";
-  }
+  const searchTerm = "llamo";
+  var index = input.search(searchTerm);
+  console.log("index es" + index);
+  var name = input.slice(index);
+  console.log("name es" + name);
+  return name;
 };
-
-app.post("/inbound", (req, res) => {
+// Twilio and Firebase working together https://stackoverflow.com/questions/50182368/why-is-twilio-and-firebase-not-working-cohesively-using-node-js
+app.post("/inbound", async (req, res) => {
   // Start our TwiML response.
   const twiml = new MessagingResponse();
-  const message = twiml.message();
+  const messages = twiml.message();
   const body = req.body.Body.toLowerCase();
   const from = req.body.From;
-  var isNew = ""; 
+  var isNew;
   console.log(body);
 
-  if(isNew){
-    message.body("*Hola* Me llamo *Flor*, ¿Cuál es tu nombre?");
-  }else if(!isNew){
-    message.body("Bienvenido de nuevo");
-  }
-  
-  if (body.includes("hola")) {
+  if (
+    body.includes("hola") ||
+    body.includes("buenos dias") ||
+    body.includes("buenas")
+  ) {
+    var NewUserMessage = "";
     db.ref()
       .child("contacts")
       .orderByChild("number")
       .equalTo(req.body.From)
-      .once("value", (snapshot) => {
+      .once("value")
+      .then(function (snapshot) {
         if (!snapshot.exists()) {
-          const message = twiml.message();
-          const newContact = {
+          db.ref("contacts/users").push({
             number: from,
-            name: "",
-            location: "",
-            age: "",
-          };
-          db.ref("contacts").push(newContact);
-         isNew = true; 
-         console.log("i dontknow this guy" +isNew);
+            title: 1,
+          });
+          NewUserMessage =
+            "¡Buenas! Soy Luz y trabajo con la iniciativa Sembrando vida Me fascina la naturaleza y la conexión que tenemos con ella. Me gusta conocer y ayudar a personas que también les guste.  Contame, ¿Cómo te llamas?  ";
         } else {
-          isNew = false;
-          console.log("i know this guy" +isNew);
-          console.log("exists!", snapshot.exists());
+          NewUserMessage =
+            "¡Buenas! Se me olvidó tu nombre. Me lo puedes recordar?";
         }
+        return NewUserMessage;
+      })
+      .then(function (NewUserMessage) {
+        console.log(NewUserMessage);
+        messages.body(NewUserMessage);
+        res.writeHead(200, { "Content-Type": "text/xml" });
+        res.end(twiml.toString());
       });
   } else if (body.includes("nombre") || body.includes("llamo")) {
-    db.ref
-      .child("users")
-      .orderByChild("ID")
+    var nameMessage = "";
+    db.ref()
+      .child("contacts")
+      .orderByChild("number")
       .equalTo(req.body.From)
-      .once("value", (snapshot) => {
-        if (snapshot.exists()) {
-          usersRef.child(req.body.From).set({
-            name: req.body.Body,
+      .once("value")
+      .then(function (snapshot) {
+       var titleSnap= snapshot.child("contacts/users").val(); 
+        if ( titleSnap.title > 0) {
+          db.ref("contacts/users").set({
+            number: from,
+            title: 1,
+            name: body,
           });
-          console.log("exists!", userData);
+          var nameF = getName(body);
+          nameMessage =
+            "Mucho Gusto," +
+            nameF +
+            "!Espero poder ayudarte y conocer más sobre vos";
+        } else {
+          nameMessage =
+            '¡Lo siento! No pude registrar tu nombre. Prueba diciendo " Me llamo " seguido de tu nombre';
         }
+        return nameMessage;
+      })
+      .then(function (nameMessage) {
+        console.log(nameMessage);
+        messages.body(nameMessage);
+        res.writeHead(200, { "Content-Type": "text/xml" });
+        res.end(twiml.toString());
       });
   } else {
     // Otherwise send a formatted message.
-    message.body("No entendí muy bien lo que dijiste");
+    var errorMessage = "No entendí muy bien lo que dijiste";
+    twiml.message(errorMessage);
+    res.writeHead(200, { "Content-Type": "text/xml" });
+    res.end(twiml.toString());
   }
-
-  res.writeHead(200, { "Content-Type": "text/xml" });
-  res.end(twiml.toString());
 });
 
 app.post("/api/messages", (req, res) => {
