@@ -1,3 +1,28 @@
+ /*
+Resources for connection with express and React 
+--> https://www.twilio.com/blog/react-app-with-node-js-server-proxy
+--> https://github.com/philnash/send-sms-react-twilio/blob/master/server/index.js
+--> https://www.twilio.com/blog/2017/10/how-to-receive-and-respond-to-a-text-message-with-node-js-express-and-twilio.html
+How to receive and send different types of data
+--> https://ahoy.twilio.com/location-aware-whatsapp-apac-webinar-ty?aliId=eyJpIjoidDBPYXVneUdpM3dUanZOSyIsInQiOiJwMTFvOXlWY1lDOGFqdGhjb2Y2N3pBPT0ifQ%253D%253D
+Async queries in DB and express
+-->https://stackoverflow.com/questions/43712720/running-queries-in-firebase-using-async-await
+-->https://zellwk.com/blog/async-await-express/
+-->https://stackoverflow.com/questions/48508020/javascript-wait-for-asynchronous-function-in-if-statement/48508056
+parsing an incoming Twilio Message
+https://www.twilio.com/blog/parsing-an-incoming-twilio-sms-webhook-with-node-js
+sending scheduled messages
+-->https://www.twilio.com/blog/2014/09/send-daily-sms-reminders-using-firebase-node-js-and-twilio.html
+FIrebase important Stuff
+-->https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot
+Twilio important stuff
+--> https://www.twilio.com/docs/sms/twiml/message
+-->https://www.twilio.com/docs/sms/api/message-resource
+Twilio media receive and send 
+-->https://support.twilio.com/hc/en-us/articles/360017961894-Sending-and-Receiving-Media-with-WhatsApp-Messaging-on-Twilio-Beta-
+How to make it safe 
+--> https://medium.com/@victorpaulo/acme-whatsapp-banking-twilio-setup-ba562e69c50e
+*/
 const express = require("express");
 const bodyParser = require("body-parser");
 const pino = require("express-pino-logger")();
