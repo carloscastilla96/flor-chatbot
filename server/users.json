@@ -1,0 +1,14 @@
+{
+  "carlos": {
+    "realName": "Peter Parker",
+    "city": "Queens, New York"
+  },
+  "daniel": {
+    "realName": "Tony Stark",
+    "city": "Stark Tower, New York"
+  },
+  "ernesto": {
+    "realName": "Odinson",
+    "city": "Asgard"
+  }
+}

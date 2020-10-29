@@ -1,0 +1,68 @@
+{
+  "name": "Corpus with entities",
+  "locale": "es",
+  "data": [
+    {
+      "intent": "nombre",
+      "utterances": [
+        "buenas me llamo @nombre @apellido",
+        "soy @nombre @apellido",
+        "me dicen @nombre @apellido",
+        "nombre es @nombre @apellido"
+      ],
+      "answers": [
+        "hola {{nombre}} {{apellido}}"
+      ]
+   },{
+      "intent": "saludo",
+      "utterances": [
+        "buenas flor",
+        "hola flor",
+        "buenos dias",
+        "como le va", 
+        "buenos tardes",
+        "como le va"
+      ],
+      "answers": [
+        "Hola bienvenid@, Soy *Flor* la asistente virtual de Sembrando Vida 👩🏽‍🌾. Me gusta ayudar a las personas y orientarlas desde mis experiencias y saberes 🙌🌱 *¿Quieres compartir alguna infomación tuya conmigo?* 😊 Esta información alimentará la Red de Sembrando Vida, se utilizará con fines sin animo de lucro y para el desarrollo de actividades de la red. Alguna de esta información sera para crear tu perfil y que otras personas puedan encontrarte. Piensa que es como sembrar una semilla, que hará cada día más fuerte a Sembrando Vida. Tu información alimentará el proceso de fortalecer dicha semillara para que crezca fuerte 🌱"
+      ]
+   }, {
+      "intent": "apellido",
+      "utterances": [
+        "ver mapa", 
+        "ver mapita",
+        "mostrame el mapa",
+        "mandame el mapa ",
+        "dejame ver el mapa"
+      ],
+      "answers": [
+        "Wait, are you planning a party for me? It's today! My birthday is today!",
+        "I'm young. I'm not sure of my birth date",
+        "I don't know my birth date. Most virtual agents are young, though, like me."
+      ]
+   }, {
+      "intent": "foto",
+      "utterances": [
+        "foto"
+      ],
+      "answers": [
+        "tu foto quedo guardada"
+      ]
+   }   
+  ],
+  "entities": {
+    "nombre": {
+      "options": {
+        "carlos": ["carlos", "Carlos"],
+        "daniel": ["daniel", "Daniel"],
+        "orbay": ["orbay","Orbay"]
+      }},
+      "apellido": {
+      "options": {
+        "castilla": ["castilla", "Castilla"],
+        "manso": ["Manso ", "manso"],
+        "beltran": ["beltran","Beltran"]
+      }
+   }
+ }
+}
