@@ -15,7 +15,7 @@ function onIntent(nlp, input) {
 }
  */
 
-var main = async (input, url) => {
+var main = async (input) => {
   const context = new ConversationContext();
   const dock = await dockStart({
     "settings": {
@@ -34,8 +34,7 @@ var main = async (input, url) => {
   //nlp.onIntent = onIntent;
   await nlp.train();
   const response = await nlp.process('es', input, context);
-
-  return [response, url];
+  return response;
 };
 
 
